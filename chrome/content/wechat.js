@@ -32,7 +32,7 @@ Zotero.WeChat = {
 
 					var attributes = [
 						'data-src', // 微信
-						'data-original' // 知乎
+						'data-actualsrc' // 知乎
 					]
 					attributes.forEach(attribute => {
 						const images = Array.from(doc.querySelectorAll(`img[${attribute}]`))
