@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://zoterowechat/skin/overlay.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://zoterowechat/locale/hello.dtd">
+
+<overlay id="zoterowechat-overlay"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<stringbundleset id="stringbundleset">
+		<stringbundle id="hello-world-zotero-strings"
+			src="chrome://zoterowechat/locale/hello.properties"/>
+	</stringbundleset>
+		
+	<!-- Include the main extension logic -->
+	<script src="chrome://zotero/content/include.js"/>
+	<script src="chrome://zoterowechat/content/include.js" />
+</overlay>
