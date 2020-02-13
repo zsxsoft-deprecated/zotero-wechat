@@ -6,7 +6,7 @@
 		<em:id>zoterowechat@zotero.org</em:id>
 		<em:name>Zotero WeChat</em:name>
 		<em:version>0.0.1</em:version>
-		<em:description>为Zotero Standalone提供微信公众号快照支持</em:description>
+		<em:description>为Zotero Standalone提供微信公众号、知乎专栏等快照支持</em:description>
 		<em:creator>zsx</em:creator>
 		<em:updateURL>https://www.zotero.org/download/plugins.rdf</em:updateURL>
 		<em:type>2</em:type> <!-- type=extension -->

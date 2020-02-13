@@ -5,31 +5,53 @@ Zotero.WeChat = {
 		this.isPDFJS = Zotero.Attachments.isPDFJS
 		var self = this
 
+		var changeTagName = (doc, original, tag) => {
+			var replacement = document.createElement(tag)
+			for (var i = 0, l = original.attributes.length; i < l; ++i) {
+				var nodeName  = original.attributes.item(i).nodeName
+				var nodeValue = original.attributes.item(i).nodeValue
+				replacement.setAttribute(nodeName, nodeValue)
+			}
+			try {
+				replacement.innerHTML = original.innerHTML
+			} catch(e) { 
+				// Unknown error........
+			}
+			return replacement
+		}
+
 		Zotero.Attachments.isPDFJS = function (doc) {
 			if (doc.contentType === "text/html") {
-				var images = Array.from(doc.querySelectorAll('img[data-src]'))
+				if (/zhihu.com|weixin.qq.com/.test(doc.URL)) {
+					// 干掉他们的js，有个dio用
+					var scripts = Array.from(doc.querySelectorAll('script'))
+					scripts.forEach(script => {
+						var replacement = changeTagName(doc, script, 'script-fuck')
+						script.parentNode.replaceChild(replacement, script)
+					})
 
-				/*
-				 * 原理：
-				 * Zotero会模拟浏览器访问，然而微信公众号有LazyLoad，会自动把所有图片加上placeholder
-				 * 因此将所有图片替换成script，这样Zotero会自动下载script，但微信公众号的js拿不到img
-				 * 由于微信有做CSP，nonce的应用导致Zotero无法执行以下js
-				 * 但是缓存后的页面就没有CSP了，JS就能跑了
-				 * 在缓存后的页面把script换成img
-				 */
-				if (images.length > 0) {
-					var s = doc.createElement('script')
+					var attributes = [
+						'data-src', // 微信
+						'data-original' // 知乎
+					]
+					attributes.forEach(attribute => {
+						const images = Array.from(doc.querySelectorAll(`img[${attribute}]`))
+						images.forEach(image => {
+							image.setAttribute('src', image.getAttribute(attribute))
+							image.removeAttribute(attribute)
+							image.removeAttribute('crossorigin')
+							image.classList.remove('img_loading')
+							image.classList.add('fuck-lazyload')
+							image.outerHTML = image.outerHTML.replace('<img', '<script') + '</script>'
+						})
+						const css = doc.createElement('style')
+						css.innerHTML = 'script-fuck{display:none}'
+						doc.head.appendChild(css)
+					})
+					const s = doc.createElement('script')
 					s.innerHTML = "Array.from(document.querySelectorAll('script.fuck-lazyload')).forEach(a => {a.outerHTML = a.outerHTML.replace('<script', '<img')})"
 					doc.body.appendChild(s)
 				}
-				images.forEach(image => {
-					image.setAttribute('src', image.getAttribute('data-src'))
-					// image.classList.remove('img_loading')
-					image.removeAttribute('data-src')
-					image.setAttribute('__sec_open_place_holder__', 1)
-					image.classList.add('fuck-lazyload')
-					image.outerHTML = image.outerHTML.replace('<img', '<script') + '</script>'
-				})
 			}
 			return self.isPDFJS.call(this, doc)
 		}
