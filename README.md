@@ -1,6 +1,9 @@
 # zotero-wechat
 为Zotero提供部分网站的支持
 
+## Deprecated
+Zotero不堪此任，我不再使用Zotero处理Web页面。现使用修改版https://github.com/webclipper/web-clipper 。
+
 ## 支持
 
 1. 知乎
@@ -13,6 +16,6 @@
 
 ## 安装
 
-1. 点击Releases，下载zoterowechat.zoteroplugin并安装到Zotero内。
+1. 点击Releases，下载zoterowechat.zoteroplugin并安装到Zotero内。(Releases内的版本已太旧，和仓库内的不一样，有bug）
 2. 下载[translators](translators)下所有文件并放置到你的translators目录下。
 3. 重启Zotero。
